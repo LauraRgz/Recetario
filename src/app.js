@@ -1,13 +1,13 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
-//338b6f8a-9a45-4e09-b883-8aa898007fa4
-console.log(authorsData);
+
 const recipesData = [
   {
     title: "Receta1",
     description: "Descripcion Receta1",
     author: {
-      name: "Autor1"
+      name: "Autor1",
+      id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
     },
     ingredients: [
       {
@@ -23,6 +23,7 @@ const recipesData = [
     date: "4",
     id: "ac6c841d-7711-428b-89c5-dd8944dc4ab4"
   },
+
   {
     title: "Receta2",
     description: "Descripcion Receta2",
@@ -49,7 +50,7 @@ const authorsData = [
   {
     name: "Autor1",
     email: "autor1@gmail.com",
-    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
+    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
   },
   {
@@ -84,7 +85,7 @@ const typeDefs = `
     type Author{
         name: String!
         email: String!
-        recipes: Recipe
+        recipes: [Recipe]
         id: ID!
     }
     type Ingredient{
@@ -109,6 +110,7 @@ const resolvers = {
     author: (parent, args, ctx, info) => {
       const authorID = parent.author;
       const result = authorsData.find(obj => obj.id === authorID);
+      result.recipes = parent;
       return result;
     },
     ingredients: (parent, args, ctx, info) => {
@@ -126,38 +128,37 @@ const resolvers = {
   },
 
   Author: {
-    recipes: (parent, args, ctx, info) => {
+    recipes: (parent, args, ctx, info) =>{
       const authorID = parent.id;
-      console.log(authorID);
       return recipesData.filter(obj => obj.author === authorID);
     }
   },
 
   Ingredient: {
     recipes: (parent, args, ctx, info) => {
-      const ingredientID = parent.id;
-      return recipesData.filter(obj => obj.ingredients === ingredientID);
+      const ingredientID = parent.recipe;
+      return recipesData.filter(obj => obj.id === ingredientID);
     }
   },
 
   Query: {
     recipe: (parent, args, ctx, info) => {
-      if (recipesData.some(obj => obj.id === args.id)) {
+      if (!recipesData.some(obj => obj.id === args.id)) {
         throw new Error(`Unknown recipe with ID: ${args.id}`);
       }
       const result = recipesData.find(obj => obj.id === args.id);
       return result;
     },
     author: (parent, args, ctx, info) => {
-      // if (authorsData.some(obj => obj.id === args.id)) {
-      //   throw new Error(`Unknown author with ID: ${args.id}`);
-      // }
+      if (!authorsData.some(obj => obj.id === args.id)) {
+        throw new Error(`Unknown author with ID: ${args.id}`);
+      }
 
       const result = authorsData.find(obj => obj.id === args.id);
       return result;
     },
     ingredient: (parent, args, ctx, info) => {
-      if (ingredientsData.some(obj => obj.id === args.id)) {
+      if (!ingredientsData.some(obj => obj.id === args.id)) {
         throw new Error(`Unknown ingredient with ID: ${args.id}`);
       }
 
@@ -190,10 +191,11 @@ const resolvers = {
       if (authorsData.some(obj => obj.email === email)) {
         throw new Error(`User email ${email} already in use`);
       }
+      const id = uuid.v4();
       const author = {
         name,
         email,
-        id: uuid.v4()
+        id
       };
 
       authorsData.push(author);
@@ -202,9 +204,10 @@ const resolvers = {
 
     addIngredient: (parent, args, ctx, info) => {
       const { name } = args;
+      const id = uuid.v4();
       const ingredient = {
         name,
-        id: uuid.v4()
+        id
       };
 
       ingredientsData.push(ingredient);
