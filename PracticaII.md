@@ -3,7 +3,7 @@
 Se desea crear una API GraphQL para un recetario. La aplicacón contendrá:
 
 **Recetas** que contienen:
-  * Título
+  *  Título
   * Descripción
   * Fecha de introducción
   * Autor
@@ -22,9 +22,9 @@ Se desea crear una API GraphQL para un recetario. La aplicacón contendrá:
 ## Paso I (3 puntos)
 
 Crear las mutaciones necesarias para poder añadir:
-  * Recetas.
-  * Autores.
-  * Ingredientes.
+  - [ ] Recetas.
+  - [x] Autores.
+  - [ ] Ingredientes.
 
 ## Paso II (3 puntos)
 
