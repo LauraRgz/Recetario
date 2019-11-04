@@ -5,8 +5,22 @@ const recipesData = [
   {
     title: "Receta1",
     description: "Descripcion Receta1",
-    date: 4,
-    id: "6e9de3ba-a88b-4e18-8197-a0688de4d959"
+    author: {
+      name: "Autor1"
+    },
+    ingredients: [
+      {
+        name: "Ingrediente1"
+      },
+      {
+        name: "Ingrediente2"
+      },
+      {
+        name: "Ingrediente3"
+      }
+    ],
+    date: "4",
+    id: "ac6c841d-7711-428b-89c5-dd8944dc4ab4"
   }
 ];
 
@@ -14,12 +28,20 @@ const authorsData = [
   {
     name: "Autor1",
     email: "autor1@gmail.com",
+    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
   },
   {
     name: "Autor2",
     email: "autor2@gmail.com",
+    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "6b9080e7-7b05-4b4c-bfdf-36e8e2013c43"
+  },
+  {
+    name: "Autor3",
+    email: "autor3@gmail.com",
+    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
+    id: "9bd4ae80-fc0b-4621-917d-9c17a160e3ae"
   }
 ];
 
@@ -41,7 +63,7 @@ const typeDefs = `
     type Author{
         name: String!
         email: String!
-        recipes: [Recipe]
+        recipes: Recipe
         id: ID!
     }
     type Ingredient{
@@ -79,28 +101,13 @@ const resolvers = {
         };
       });
       return result;
-
-      // let ingredientes = parent.ingredients.slice();
-      // let resultados = ingredientsData.slice();
-      // let a = [];
-      // ingredientes.forEach(element => {
-      //     a = resultados.filter(obj => obj.id === element);
-
-      //   });
-
-      // console.log(a);
-      // return a.map(ingrediente => {
-      //   return {
-      //     name: ingrediente.name,
-      //     id: ingrediente.id
-      //   };
-      // });
     }
   },
 
   Author: {
     recipes: (parent, args, ctx, info) => {
-      const authorID = parent.id;
+      const authorID = parent.author.id;
+      console.log(authorID);
       return recipesData.filter(obj => obj.author === authorID);
     }
   },
