@@ -35,7 +35,7 @@ const typeDefs = `
         description: String!
         date: String!
         author: Author!
-        ingredients: Ingredient!
+        ingredients: [Ingredient]!
         id: ID!
     }
     type Author{
@@ -55,7 +55,7 @@ const typeDefs = `
         ingredient(id: ID!): Ingredient
     }
     type Mutation{
-        addRecipe(title: String!, description: String!, author: ID!, ingredients: ID!): Recipe!
+        addRecipe(title: String!, description: String!, author: ID!, ingredients: [ID]!): Recipe!
         addAuthor(name: String!, email: String!): Author!
         addIngredient(name: String!): Ingredient!
     }
@@ -69,9 +69,32 @@ const resolvers = {
       return result;
     },
     ingredients: (parent, args, ctx, info) => {
-        const ingredientID = parent.ingredients;
-        const result = ingredientsData.find(obj => obj.id === ingredientID);
-        return result;
+      const result = parent.ingredients.map(ingredient => {
+        const ingredientInfo = ingredientsData.find(
+          obj => obj.id === ingredient
+        );
+        return {
+          name: ingredientInfo.name,
+          id: ingredientInfo.id
+        };
+      });
+      return result;
+
+      // let ingredientes = parent.ingredients.slice();
+      // let resultados = ingredientsData.slice();
+      // let a = [];
+      // ingredientes.forEach(element => {
+      //     a = resultados.filter(obj => obj.id === element);
+
+      //   });
+
+      // console.log(a);
+      // return a.map(ingrediente => {
+      //   return {
+      //     name: ingrediente.name,
+      //     id: ingrediente.id
+      //   };
+      // });
     }
   },
 
