@@ -1,4 +1,4 @@
-#Práctica II
+# Práctica II
 
 Se desea crear una API GraphQL para un recetario. La aplicacón contendrá:
 
