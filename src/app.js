@@ -1,6 +1,7 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
-
+//338b6f8a-9a45-4e09-b883-8aa898007fa4
+console.log(authorsData);
 const recipesData = [
   {
     title: "Receta1",
@@ -21,6 +22,26 @@ const recipesData = [
     ],
     date: "4",
     id: "ac6c841d-7711-428b-89c5-dd8944dc4ab4"
+  },
+  {
+    title: "Receta2",
+    description: "Descripcion Receta2",
+    date: "4",
+    author: {
+      name: "Autor2",
+      id: "6b9080e7-7b05-4b4c-bfdf-36e8e2013c43"
+    },
+    ingredients: [
+      {
+        name: "Ingrediente2",
+        id: "3989b32f-6989-4129-a260-869ce96c489d"
+      },
+      {
+        name: "Ingrediente3",
+        id: "1685889b-03ad-4a65-b4b4-bee39b2a741a"
+      }
+    ],
+    id: "67b55531-aec7-49b5-8e5f-a4e26f2e991c"
   }
 ];
 
@@ -28,19 +49,19 @@ const authorsData = [
   {
     name: "Autor1",
     email: "autor1@gmail.com",
-    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
+    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
   },
   {
     name: "Autor2",
     email: "autor2@gmail.com",
-    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
+    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "6b9080e7-7b05-4b4c-bfdf-36e8e2013c43"
   },
   {
     name: "Autor3",
     email: "autor3@gmail.com",
-    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
+    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
     id: "9bd4ae80-fc0b-4621-917d-9c17a160e3ae"
   }
 ];
@@ -50,7 +71,7 @@ const ingredientsData = [
   { name: "Ingrediente2", id: "3989b32f-6989-4129-a260-869ce96c489d" },
   { name: "Ingrediente3", id: "1685889b-03ad-4a65-b4b4-bee39b2a741a" }
 ];
-
+console.log(authorsData);
 const typeDefs = `
     type Recipe{
         title: String!
@@ -106,7 +127,7 @@ const resolvers = {
 
   Author: {
     recipes: (parent, args, ctx, info) => {
-      const authorID = parent.author.id;
+      const authorID = parent.id;
       console.log(authorID);
       return recipesData.filter(obj => obj.author === authorID);
     }
@@ -128,9 +149,9 @@ const resolvers = {
       return result;
     },
     author: (parent, args, ctx, info) => {
-      if (authorsData.some(obj => obj.id === args.id)) {
-        throw new Error(`Unknown author with ID: ${args.id}`);
-      }
+      // if (authorsData.some(obj => obj.id === args.id)) {
+      //   throw new Error(`Unknown author with ID: ${args.id}`);
+      // }
 
       const result = authorsData.find(obj => obj.id === args.id);
       return result;
