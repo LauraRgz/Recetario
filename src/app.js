@@ -2,77 +2,67 @@ import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
 
 const recipesData = [
-  {
-    title: "Receta1",
-    description: "Descripcion Receta1",
-    author: {
-      name: "Autor1",
-      id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
-    },
-    ingredients: [
-      {
-        name: "Ingrediente1"
-      },
-      {
-        name: "Ingrediente2"
-      },
-      {
-        name: "Ingrediente3"
-      }
-    ],
-    date: "4",
-    id: "ac6c841d-7711-428b-89c5-dd8944dc4ab4"
-  },
-
-  {
-    title: "Receta2",
-    description: "Descripcion Receta2",
-    date: "4",
-    author: {
-      name: "Autor2",
-      id: "6b9080e7-7b05-4b4c-bfdf-36e8e2013c43"
-    },
-    ingredients: [
-      {
-        name: "Ingrediente2",
-        id: "3989b32f-6989-4129-a260-869ce96c489d"
-      },
-      {
-        name: "Ingrediente3",
-        id: "1685889b-03ad-4a65-b4b4-bee39b2a741a"
-      }
-    ],
-    id: "67b55531-aec7-49b5-8e5f-a4e26f2e991c"
-  }
+  // {
+  //   id: "f9ce5671-ced5-49f0-9d95-b805107e4307",
+  //   title: "title1",
+  //   description: "descripcion1",
+  //   author: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
+  //   ingredients: ["2cf2c8e2-9c20-4d9e-88d3-0e3854362301"],
+  //   date: 4,
+     
+  // },
+  // {
+  //   id: "c35b0de5-69b3-44eb-b92e-f66346bcba8f",
+  //   title: "receta2",
+  //   description: "descripcion2",
+  //   author: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
+  //   ingredients: ["fb466cc5-973d-44dc-b838-ce2dae423f90", "2cf2c8e2-9c20-4d9e-88d3-0e3854362301"],
+  //   date: 4,
+  // },
+  // {
+  //   id: "e97382fd-0283-48e9-b76e-96c97524939d",
+  //   title: "receta3",
+  //   description: "descripcion3",
+  //   author: "abde6470-293e-459f-ac01-e66f8e57d191",
+  //   ingredients: ["f9ce5671-ced5-49f0-9d95-b805107e4307", "f9ce5671-ced5-49f0-9d95-b805107e4307"],
+  //   date: 4,
+  // }
 ];
 
 const authorsData = [
   {
-    name: "Autor1",
-    email: "autor1@gmail.com",
-    recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
-    id: "cf91012a-8e25-437d-bd8d-5d1534a8b9fa"
+    name: "Andrés Bravo",
+    email: "yo@correo.com",
+    id: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
+    recipes: []
   },
   {
-    name: "Autor2",
-    email: "autor2@gmail.com",
-    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
-    id: "6b9080e7-7b05-4b4c-bfdf-36e8e2013c43"
-  },
-  {
-    name: "Autor3",
-    email: "autor3@gmail.com",
-    //recipes: "ac6c841d-7711-428b-89c5-dd8944dc4ab4",
-    id: "9bd4ae80-fc0b-4621-917d-9c17a160e3ae"
+    name: "Laura Rodríguez",
+    email: "ella@.com",
+    id: "abde6470-293e-459f-ac01-e66f8e57d191",
+    recipes: []
   }
 ];
 
 const ingredientsData = [
-  { name: "Ingrediente1", id: "40014aad-8729-40d0-9c33-2cac9039bcf0" },
-  { name: "Ingrediente2", id: "3989b32f-6989-4129-a260-869ce96c489d" },
-  { name: "Ingrediente3", id: "1685889b-03ad-4a65-b4b4-bee39b2a741a" }
+  {
+    id: "2cf2c8e2-9c20-4d9e-88d3-0e3854362301",
+    name: "tomate",
+    recipes: []
+  },
+  {
+    id: "9f28c050-0ca6-4ac3-9763-79b3a4a323f2",
+    name: "zanahoria",
+    recipes: []
+  },
+  {
+    id: "fb466cc5-973d-44dc-b838-ce2dae423f90",
+    name: "lechuga",
+    recipes: []
+  }
+  
 ];
-console.log(authorsData);
+
 const typeDefs = `
     type Recipe{
         title: String!
@@ -110,22 +100,21 @@ const resolvers = {
     author: (parent, args, ctx, info) => {
       const authorID = parent.author;
       const result = authorsData.find(obj => obj.id === authorID);
-      result.recipes = parent;
+      
       return result;
     },
     ingredients: (parent, args, ctx, info) => {
-      const result = parent.ingredients.map(ingredient => {
-        const ingredientInfo = ingredientsData.find(
-          obj => obj.id === ingredient
-        );
-        return {
+      const result = parent.ingredients.map(element =>{ 
+        const ingredientInfo = ingredientsData.find(obj => obj.id === element);
+        console.log(ingredientInfo);
+        return{
           name: ingredientInfo.name,
           id: ingredientInfo.id
         };
       });
       return result;
-    }
-  },
+      } 
+    },
 
   Author: {
     recipes: (parent, args, ctx, info) =>{
@@ -136,8 +125,18 @@ const resolvers = {
 
   Ingredient: {
     recipes: (parent, args, ctx, info) => {
-      const ingredientID = parent.recipe;
-      return recipesData.filter(obj => obj.id === ingredientID);
+      const result = parent.recipes.map(element =>{
+        const recipeInfo = recipesData.find(obj => obj.id === element);
+        return{
+          title: recipeInfo.title,
+          id: recipeInfo.id,
+          description: recipeInfo.description,
+          date: recipeInfo.date,
+          author: recipeInfo.author,
+          ingredients: recipeInfo.ingredients,
+        };
+      });
+      return result;
     }
   },
 
@@ -172,7 +171,6 @@ const resolvers = {
 
       const date = new Date().getDate();
       const id = uuid.v4();
-
       const recipe = {
         title,
         description,
@@ -181,7 +179,13 @@ const resolvers = {
         ingredients,
         id
       };
-
+      const autorObjeto = authorsData.find(obj => obj.id === author);
+      autorObjeto.recipes.push(id);
+      console.log(autorObjeto);
+      ingredients.map(element => {
+        const ingredientInfo = ingredientsData.find(obj => obj.id === element);
+        ingredientInfo.recipes.push(id);
+      });
       recipesData.push(recipe);
       return recipe;
     },
@@ -195,7 +199,8 @@ const resolvers = {
       const author = {
         name,
         email,
-        id
+        id,
+        recipes
       };
 
       authorsData.push(author);
