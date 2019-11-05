@@ -29,7 +29,7 @@ Crear las mutaciones necesarias para poder añadir:
 ## Paso II (3 puntos)
 
 Crear las queries necesarias para poder consultar:
- - [ ] Lista de recetas.
+ - [x] Lista de recetas.
  - [ ] Lista de autores.
  - [ ] Lista de ingredientes.
  - [x] Recetas de un autor específico.

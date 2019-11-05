@@ -2,31 +2,6 @@ import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
 
 const recipesData = [
-  // {
-  //   id: "f9ce5671-ced5-49f0-9d95-b805107e4307",
-  //   title: "title1",
-  //   description: "descripcion1",
-  //   author: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
-  //   ingredients: ["2cf2c8e2-9c20-4d9e-88d3-0e3854362301"],
-  //   date: 4,
-     
-  // },
-  // {
-  //   id: "c35b0de5-69b3-44eb-b92e-f66346bcba8f",
-  //   title: "receta2",
-  //   description: "descripcion2",
-  //   author: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
-  //   ingredients: ["fb466cc5-973d-44dc-b838-ce2dae423f90", "2cf2c8e2-9c20-4d9e-88d3-0e3854362301"],
-  //   date: 4,
-  // },
-  // {
-  //   id: "e97382fd-0283-48e9-b76e-96c97524939d",
-  //   title: "receta3",
-  //   description: "descripcion3",
-  //   author: "abde6470-293e-459f-ac01-e66f8e57d191",
-  //   ingredients: ["f9ce5671-ced5-49f0-9d95-b805107e4307", "f9ce5671-ced5-49f0-9d95-b805107e4307"],
-  //   date: 4,
-  // }
 ];
 
 const authorsData = [
@@ -87,6 +62,8 @@ const typeDefs = `
         recipe(id: ID!): Recipe
         author(id: ID!): Author
         ingredient(id: ID!): Ingredient
+        showRecipes: [Recipe]
+
     }
     type Mutation{
         addRecipe(title: String!, description: String!, author: ID!, ingredients: [ID]!): Recipe!
@@ -106,7 +83,6 @@ const resolvers = {
     ingredients: (parent, args, ctx, info) => {
       const result = parent.ingredients.map(element =>{ 
         const ingredientInfo = ingredientsData.find(obj => obj.id === element);
-        console.log(ingredientInfo);
         return{
           name: ingredientInfo.name,
           id: ingredientInfo.id
@@ -163,7 +139,10 @@ const resolvers = {
 
       const result = ingredientsData.find(obj => obj.id === args.id);
       return result;
-    }
+    },
+    showRecipes: (parent, args, ctx, info) => {
+      return recipesData.map(elem => {return elem});
+    },
   },
   Mutation: {
     addRecipe: (parent, args, ctx, info) => {
@@ -181,7 +160,6 @@ const resolvers = {
       };
       const autorObjeto = authorsData.find(obj => obj.id === author);
       autorObjeto.recipes.push(id);
-      console.log(autorObjeto);
       ingredients.map(element => {
         const ingredientInfo = ingredientsData.find(obj => obj.id === element);
         ingredientInfo.recipes.push(id);
