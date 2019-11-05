@@ -1,8 +1,7 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
 
-const recipesData = [
-];
+const recipesData = [];
 
 const authorsData = [
   {
@@ -35,7 +34,6 @@ const ingredientsData = [
     name: "lechuga",
     recipes: []
   }
-  
 ];
 
 const typeDefs = `
@@ -71,6 +69,7 @@ const typeDefs = `
         addRecipe(title: String!, description: String!, author: ID!, ingredients: [ID]!): Recipe!
         addAuthor(name: String!, email: String!): Author!
         addIngredient(name: String!): Ingredient!
+        removeRecipe(id: ID!): Recipe
     }
 `;
 
@@ -79,23 +78,23 @@ const resolvers = {
     author: (parent, args, ctx, info) => {
       const authorID = parent.author;
       const result = authorsData.find(obj => obj.id === authorID);
-      
+
       return result;
     },
     ingredients: (parent, args, ctx, info) => {
-      const result = parent.ingredients.map(element =>{ 
+      const result = parent.ingredients.map(element => {
         const ingredientInfo = ingredientsData.find(obj => obj.id === element);
-        return{
+        return {
           name: ingredientInfo.name,
           id: ingredientInfo.id
         };
       });
       return result;
-      } 
-    },
+    }
+  },
 
   Author: {
-    recipes: (parent, args, ctx, info) =>{
+    recipes: (parent, args, ctx, info) => {
       const authorID = parent.id;
       return recipesData.filter(obj => obj.author === authorID);
     }
@@ -103,15 +102,15 @@ const resolvers = {
 
   Ingredient: {
     recipes: (parent, args, ctx, info) => {
-      const result = parent.recipes.map(element =>{
+      const result = parent.recipes.map(element => {
         const recipeInfo = recipesData.find(obj => obj.id === element);
-        return{
+        return {
           title: recipeInfo.title,
           id: recipeInfo.id,
           description: recipeInfo.description,
           date: recipeInfo.date,
           author: recipeInfo.author,
-          ingredients: recipeInfo.ingredients,
+          ingredients: recipeInfo.ingredients
         };
       });
       return result;
@@ -143,15 +142,20 @@ const resolvers = {
       return result;
     },
     showRecipes: (parent, args, ctx, info) => {
-      return recipesData.map(elem => {return elem});
+      return recipesData.map(elem => {
+        return elem;
+      });
     },
     showAuthors: (parent, args, ctx, info) => {
-      return authorsData.map(elem => {return elem});
+      return authorsData.map(elem => {
+        return elem;
+      });
     },
     showIngredients: (parent, args, ctx, info) => {
-      return ingredientsData.map(elem => {return elem});
-    },
-    
+      return ingredientsData.map(elem => {
+        return elem;
+      });
+    }
   },
   Mutation: {
     addRecipe: (parent, args, ctx, info) => {
@@ -174,6 +178,7 @@ const resolvers = {
         ingredientInfo.recipes.push(id);
       });
       recipesData.push(recipe);
+      console.log(`Recipe ${recipe.id} added sucessfully`);
       return recipe;
     },
 
@@ -207,7 +212,11 @@ const resolvers = {
 
       ingredientsData.push(ingredient);
       return ingredient;
-    }
+    },
+    // removeRecipe: (parent, args, ctx, info) => {
+    //   const { id } = args;
+    //   return recipesData.splice(recipesData.find(obj => obj.id === id));
+    // }
   }
 };
 
