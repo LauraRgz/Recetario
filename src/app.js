@@ -151,6 +151,7 @@ const resolvers = {
     showIngredients: (parent, args, ctx, info) => {
       return ingredientsData.map(elem => {return elem});
     },
+    
   },
   Mutation: {
     addRecipe: (parent, args, ctx, info) => {

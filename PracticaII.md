@@ -32,8 +32,8 @@ Crear las queries necesarias para poder consultar:
  - [x] Lista de recetas.
  - [x] Lista de autores.
  - [x] Lista de ingredientes.
- - [ ] Recetas de un autor específico.
- - [ ] Recetas que contienen un ingrediente específico.
+ - [x] Recetas de un autor específico.
+ - [x] Recetas que contienen un ingrediente específico.
 
 ## Paso III (4 puntos)
 
