@@ -63,6 +63,8 @@ const typeDefs = `
         author(id: ID!): Author
         ingredient(id: ID!): Ingredient
         showRecipes: [Recipe]
+        showAuthors: [Author]
+        showIngredients: [Ingredient]
 
     }
     type Mutation{
@@ -143,6 +145,12 @@ const resolvers = {
     showRecipes: (parent, args, ctx, info) => {
       return recipesData.map(elem => {return elem});
     },
+    showAuthors: (parent, args, ctx, info) => {
+      return authorsData.map(elem => {return elem});
+    },
+    showIngredients: (parent, args, ctx, info) => {
+      return ingredientsData.map(elem => {return elem});
+    },
   },
   Mutation: {
     addRecipe: (parent, args, ctx, info) => {
@@ -173,6 +181,7 @@ const resolvers = {
       if (authorsData.some(obj => obj.email === email)) {
         throw new Error(`User email ${email} already in use`);
       }
+      const recipes = [];
       const id = uuid.v4();
       const author = {
         name,
@@ -188,9 +197,11 @@ const resolvers = {
     addIngredient: (parent, args, ctx, info) => {
       const { name } = args;
       const id = uuid.v4();
+      const recipes = [];
       const ingredient = {
         name,
-        id
+        id,
+        recipes
       };
 
       ingredientsData.push(ingredient);
