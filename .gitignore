@@ -98,4 +98,6 @@ dist/
 
 #Archivos de texto
 *.txt
+
+queriesTemplates.js
 # End of https://www.gitignore.io/api/node
