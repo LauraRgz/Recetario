@@ -1,7 +1,8 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
 import chalk from "chalk";
-
+import { removeRecipeFunction } from "./utils";
+//import { removeRecipeFunction } from "../utils";
 const recipesData = [];
 const authorsData = [];
 const ingredientsData = [];
@@ -40,6 +41,7 @@ const typeDefs = `
         addAuthor(name: String!, email: String!): Author!
         addIngredient(name: String!): Ingredient!
         removeRecipe(id: ID!): String!
+        removeAuthor(id: ID!): String!
     }
 `;
 
@@ -194,27 +196,41 @@ const resolvers = {
       return ingredient;
     },
     removeRecipe: (parent, args, ctx, info) => {
+      //const { id } = args;
+      console.log(args);
+      removeRecipeFunction(args);
+      // const result = recipesData.find(obj => obj.id === id);
+      // if (result) {
+      //   recipesData.splice(recipesData.indexOf(result), 1);
+      //   const result1 = authorsData.find(obj => obj.id === result.id);
+      //   const result2 = ingredientsData.find(obj => obj.id === result.id);
+      //   if (result1) {
+      //     authorsData.splice(authorsData.indexOf(result1), 1);
+      //     console.log(chalk.redBright(`Recipe removed from author ${result1.name}`));
+      //   }
+      //   if(result2){
+      //     ingredientsData.splice(ingredientsData.indexOf(result2));
+      //     console.log(chalk.redBright(`Recipe removed from ingredient ${result2.name}`));
+      //   }
+      // } else {
+      //   throw new Error(`Recipe ${id} not found`);
+      // }
+      // return "Receta eliminada correctamente";
+    },
+    removeAuthor: (parent, args, ctx, info) => {
       const { id } = args;
-      const result = recipesData.find(obj => obj.id === id);
-      if (result) {
-        recipesData.splice(recipesData.indexOf(result), 1);
-        const result1 = authorsData.find(obj => obj.id === result.id);
-        const result2 = ingredientsData.find(obj => obj.id === result.id);
-        if (result1) {
-          authorsData.splice(authorsData.indexOf(result1), 1);
-          console.log(chalk.redBright(`Recipe removed from author ${result1.name}`));
-        }
-        if(result2){
-          ingredientsData.splice(ingredientsData.indexOf(result2));
-          console.log(chalk.redBright(`Recipe removed from ingredient ${result2.name}`));
-        }
-      } else {
-        throw new Error(`Recipe ${id} not found`);
+      const result = authorsData.find(obj => obj.id === id);
+      if (result){
+        authorsData.splice(authorsData.indexOf(result), 1);
+        const resultRecipe = recipesData.find(obj => obj.id === result.id);
+        
+
       }
-      return "Receta eliminada correctamente";
     }
   }
 };
+
+export {authorsData, ingredientsData, recipesData};
 
 const server = new GraphQLServer({ typeDefs, resolvers });
 server.start(() => console.log("Server started"));
