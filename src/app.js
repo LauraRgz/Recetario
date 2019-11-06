@@ -1,5 +1,6 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
+import chalk from 'chalk'
 
 const recipesData = [];
 
@@ -84,10 +85,11 @@ const resolvers = {
     ingredients: (parent, args, ctx, info) => {
       const result = parent.ingredients.map(element => {
         const ingredientInfo = ingredientsData.find(obj => obj.id === element);
-        return {
-          name: ingredientInfo.name,
-          id: ingredientInfo.id
-        };
+        return ingredientInfo;
+        // return {
+        //   name: ingredientInfo.name,
+        //   id: ingredientInfo.id
+        // };
       });
       return result;
     }
@@ -104,16 +106,23 @@ const resolvers = {
     recipes: (parent, args, ctx, info) => {
       const result = parent.recipes.map(element => {
         const recipeInfo = recipesData.find(obj => obj.id === element);
-        return {
-          title: recipeInfo.title,
-          id: recipeInfo.id,
-          description: recipeInfo.description,
-          date: recipeInfo.date,
-          author: recipeInfo.author,
-          ingredients: recipeInfo.ingredients
-        };
+        return recipeInfo;
+        // return {
+        //   title: recipeInfo.title,
+        //   id: recipeInfo.id,
+        //   description: recipeInfo.description,
+        //   date: recipeInfo.date,
+        //   author: recipeInfo.author,
+        //   ingredients: recipeInfo.ingredients
+        // };
       });
       return result;
+      // const recipesID = args.recipes;
+      // return recipesID.map(element => {
+      //   return recipesData.find(obj => {
+      //     obj.id === element;
+      //   });
+      // });
     }
   },
 
@@ -178,7 +187,7 @@ const resolvers = {
         ingredientInfo.recipes.push(id);
       });
       recipesData.push(recipe);
-      console.log(`Recipe ${recipe.id} added sucessfully`);
+      console.log(chalk.cyanBright(`\n Recipe ${chalk.bold(recipe.title) } added sucessfully! \n ID: ${chalk.bold(recipe.id)}`));
       return recipe;
     },
 
@@ -197,6 +206,7 @@ const resolvers = {
       };
 
       authorsData.push(author);
+      console.log(chalk.magentaBright(`\n Author ${chalk.bold(author.name) } added sucessfully! \n ID: ${chalk.bold(author.id)}`));
       return author;
     },
 
@@ -211,8 +221,9 @@ const resolvers = {
       };
 
       ingredientsData.push(ingredient);
+      console.log(chalk.greenBright(`\n Ingredient ${chalk.bold(ingredient.name) } added sucessfully! \n ID: ${chalk.bold(ingredient.id)}`));
       return ingredient;
-    },
+    }
     // removeRecipe: (parent, args, ctx, info) => {
     //   const { id } = args;
     //   return recipesData.splice(recipesData.find(obj => obj.id === id));
