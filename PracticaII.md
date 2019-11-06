@@ -38,7 +38,7 @@ Crear las queries necesarias para poder consultar:
 ## Paso III (4 puntos)
 
 Crear las mutaciones necesarias para poder:
- - [ ] Borrar una receta.
+ - [x] Borrar una receta.
  - [ ] Borrar un autor. Al borrar un autor, se borran todas sus recetas.
  - [ ] Borrar un ingrediente. Al borrar un ingrediente, se borran todas las recetas que lo contengan.
  - [ ] Actualizar datos de un autor.

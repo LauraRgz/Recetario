@@ -1,41 +1,10 @@
 import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
-import chalk from 'chalk'
+import chalk from "chalk";
 
 const recipesData = [];
-
-const authorsData = [
-  {
-    name: "Andrés Bravo",
-    email: "yo@correo.com",
-    id: "0f995037-71ce-42f3-a9c6-8e03a07d9e76",
-    recipes: []
-  },
-  {
-    name: "Laura Rodríguez",
-    email: "ella@.com",
-    id: "abde6470-293e-459f-ac01-e66f8e57d191",
-    recipes: []
-  }
-];
-
-const ingredientsData = [
-  {
-    id: "2cf2c8e2-9c20-4d9e-88d3-0e3854362301",
-    name: "tomate",
-    recipes: []
-  },
-  {
-    id: "9f28c050-0ca6-4ac3-9763-79b3a4a323f2",
-    name: "zanahoria",
-    recipes: []
-  },
-  {
-    id: "fb466cc5-973d-44dc-b838-ce2dae423f90",
-    name: "lechuga",
-    recipes: []
-  }
-];
+const authorsData = [];
+const ingredientsData = [];
 
 const typeDefs = `
     type Recipe{
@@ -70,7 +39,7 @@ const typeDefs = `
         addRecipe(title: String!, description: String!, author: ID!, ingredients: [ID]!): Recipe!
         addAuthor(name: String!, email: String!): Author!
         addIngredient(name: String!): Ingredient!
-        removeRecipe(id: ID!): Recipe
+        removeRecipe(id: ID!): String!
     }
 `;
 
@@ -86,10 +55,6 @@ const resolvers = {
       const result = parent.ingredients.map(element => {
         const ingredientInfo = ingredientsData.find(obj => obj.id === element);
         return ingredientInfo;
-        // return {
-        //   name: ingredientInfo.name,
-        //   id: ingredientInfo.id
-        // };
       });
       return result;
     }
@@ -107,22 +72,8 @@ const resolvers = {
       const result = parent.recipes.map(element => {
         const recipeInfo = recipesData.find(obj => obj.id === element);
         return recipeInfo;
-        // return {
-        //   title: recipeInfo.title,
-        //   id: recipeInfo.id,
-        //   description: recipeInfo.description,
-        //   date: recipeInfo.date,
-        //   author: recipeInfo.author,
-        //   ingredients: recipeInfo.ingredients
-        // };
       });
       return result;
-      // const recipesID = args.recipes;
-      // return recipesID.map(element => {
-      //   return recipesData.find(obj => {
-      //     obj.id === element;
-      //   });
-      // });
     }
   },
 
@@ -187,7 +138,13 @@ const resolvers = {
         ingredientInfo.recipes.push(id);
       });
       recipesData.push(recipe);
-      console.log(chalk.cyanBright(`\n Recipe ${chalk.bold(recipe.title) } added sucessfully! \n ID: ${chalk.bold(recipe.id)}`));
+      console.log(
+        chalk.cyanBright(
+          `\n Recipe ${chalk.bold(
+            recipe.title
+          )} added sucessfully! \n ID: ${chalk.bold(recipe.id)}`
+        )
+      );
       return recipe;
     },
 
@@ -206,7 +163,13 @@ const resolvers = {
       };
 
       authorsData.push(author);
-      console.log(chalk.magentaBright(`\n Author ${chalk.bold(author.name) } added sucessfully! \n ID: ${chalk.bold(author.id)}`));
+      console.log(
+        chalk.magentaBright(
+          `\n Author ${chalk.bold(
+            author.name
+          )} added sucessfully! \n ID: ${chalk.bold(author.id)}`
+        )
+      );
       return author;
     },
 
@@ -221,13 +184,35 @@ const resolvers = {
       };
 
       ingredientsData.push(ingredient);
-      console.log(chalk.greenBright(`\n Ingredient ${chalk.bold(ingredient.name) } added sucessfully! \n ID: ${chalk.bold(ingredient.id)}`));
+      console.log(
+        chalk.greenBright(
+          `\n Ingredient ${chalk.bold(
+            ingredient.name
+          )} added sucessfully! \n ID: ${chalk.bold(ingredient.id)}`
+        )
+      );
       return ingredient;
+    },
+    removeRecipe: (parent, args, ctx, info) => {
+      const { id } = args;
+      const result = recipesData.find(obj => obj.id === id);
+      if (result) {
+        recipesData.splice(recipesData.indexOf(result), 1);
+        const result1 = authorsData.find(obj => obj.id === result.id);
+        const result2 = ingredientsData.find(obj => obj.id === result.id);
+        if (result1) {
+          authorsData.splice(authorsData.indexOf(result1), 1);
+          console.log(chalk.redBright(`Recipe removed from author ${result1.name}`));
+        }
+        if(result2){
+          ingredientsData.splice(ingredientsData.indexOf(result2));
+          console.log(chalk.redBright(`Recipe removed from ingredient ${result2.name}`));
+        }
+      } else {
+        throw new Error(`Recipe ${id} not found`);
+      }
+      return "Receta eliminada correctamente";
     }
-    // removeRecipe: (parent, args, ctx, info) => {
-    //   const { id } = args;
-    //   return recipesData.splice(recipesData.find(obj => obj.id === id));
-    // }
   }
 };
 
