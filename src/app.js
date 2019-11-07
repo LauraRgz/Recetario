@@ -47,6 +47,7 @@ const typeDefs = `
         removeIngredient(id: ID!): String!
         updateAuthor(id: ID!, name: String, email: String): Author!
         updateIngredient(id: ID!, name: String!): Ingredient!
+        updateRecipe(id: ID!, title: String, description: String, ingredients: [ID] ): Recipe!
     }
 `;
 
@@ -255,6 +256,27 @@ const resolvers = {
     updateIngredient: (parent, args, ctx, info) => {
       const result = ingredientsData.find(obj => obj.id === args.id);
       result.name = args.name;
+      return result;
+    },
+    updateRecipe: (parent, args, ctx, info) => {
+      const result = recipesData.find(obj => obj.id === args.id);
+      if(args.title) result.title = args.title;
+      if(args.description) result.description = args.description;
+      
+      if(args.ingredients) {
+        const oldIngredients = result.ingredients.map(ingredienteID => {
+          return ingredientsData.find(obj => obj.id === ingredienteID);          
+        });
+
+        oldIngredients.forEach(elem => elem.recipes.splice(elem.recipes.indexOf(result.id),1));
+
+        const newIngredients = args.ingredients.map(ingredienteID => {
+          return ingredientsData.find(obj => obj.id ===ingredienteID);
+        });
+
+        newIngredients.forEach(elem => elem.recipes.push(args.id));
+        result.ingredients = args.ingredients;        
+      };
       return result;
     }
   }
