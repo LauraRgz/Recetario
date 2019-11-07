@@ -241,9 +241,9 @@ const resolvers = {
         });
         authorsData.splice(authorsData.indexOf(result), 1);
       }
-      
+
       console.log(chalk.redBright(`\nAuthor with ID ${args.id} deleted\n`));
-      
+
       return "Author deleted";
     },
 
@@ -268,23 +268,25 @@ const resolvers = {
 
     updateRecipe: (parent, args, ctx, info) => {
       const result = recipesData.find(obj => obj.id === args.id);
-      if(args.title) result.title = args.title;
-      if(args.description) result.description = args.description;
-      
-      if(args.ingredients) {
+      if (args.title) result.title = args.title;
+      if (args.description) result.description = args.description;
+
+      if (args.ingredients) {
         const oldIngredients = result.ingredients.map(ingredienteID => {
-          return ingredientsData.find(obj => obj.id === ingredienteID);          
+          return ingredientsData.find(obj => obj.id === ingredienteID);
         });
 
-        oldIngredients.forEach(elem => elem.recipes.splice(elem.recipes.indexOf(result.id),1));
+        oldIngredients.forEach(elem =>
+          elem.recipes.splice(elem.recipes.indexOf(result.id), 1)
+        );
 
         const newIngredients = args.ingredients.map(ingredienteID => {
-          return ingredientsData.find(obj => obj.id ===ingredienteID);
+          return ingredientsData.find(obj => obj.id === ingredienteID);
         });
 
         newIngredients.forEach(elem => elem.recipes.push(args.id));
-        result.ingredients = args.ingredients;        
-      };
+        result.ingredients = args.ingredients;
+      }
       console.log(chalk.green(`\nRecipe with ID ${args.id} updated\n`));
       return result;
     }
@@ -294,4 +296,4 @@ const resolvers = {
 export { authorsData, ingredientsData, recipesData };
 
 const server = new GraphQLServer({ typeDefs, resolvers });
-server.start(() => console.log(chalk.green("\Server started")));
+server.start(() => console.log(chalk.green("Server started")));
