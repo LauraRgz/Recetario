@@ -209,14 +209,18 @@ const resolvers = {
 
     removeIngredient: (parent, args, ctx, info) => {
       const ingredienteID = args.id;
-      recipesData = recipesData.filter( recipe => {
-        if(recipe.ingredients.includes(ingredienteID)){
+      recipesData = recipesData.filter(recipe => {
+        if (recipe.ingredients.includes(ingredienteID)) {
           const idAuthor = recipe.author;
           const author = authorsData.find(aut => aut.id === idAuthor);
-          author.recipes = author.recipes.filter(recp => !(recp !== recipe.id))
-        } return !(recipe.ingredients.includes(ingredienteID))});
+          author.recipes = author.recipes.filter(recp => !(recp !== recipe.id));
+        }
+        return !recipe.ingredients.includes(ingredienteID);
+      });
 
-      ingredientsData = ingredientsData.filter( ingredient => !(ingredient.id === ingredienteID));
+      ingredientsData = ingredientsData.filter(
+        ingredient => !(ingredient.id === ingredienteID)
+      );
       return "Ingredient removed";
     },
 
