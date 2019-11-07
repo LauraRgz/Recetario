@@ -46,7 +46,7 @@ const typeDefs = `
         removeAuthor(id: ID!): String!
         removeIngredient(id: ID!): String!
         updateAuthor(id: ID!, name: String, email: String): Author!
-        
+        updateIngredient(id: ID!, name: String!): Ingredient!
     }
 `;
 
@@ -243,16 +243,20 @@ const resolvers = {
 
     updateAuthor: (parent, args, ctx, info) => {
       const result = authorsData.find(obj => obj.id === args.id);
-      if(args.name){
+      if (args.name) {
         result.name = args.name;
       }
-      if(args.email){
-        result.email = args.email; 
+      if (args.email) {
+        result.email = args.email;
       }
-      return result;   
+      return result;
     },
 
-
+    updateIngredient: (parent, args, ctx, info) => {
+      const result = ingredientsData.find(obj => obj.id === args.id);
+      result.name = args.name;
+      return result;
+    }
   }
 };
 
