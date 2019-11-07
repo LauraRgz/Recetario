@@ -201,30 +201,11 @@ const resolvers = {
       );
       return ingredient;
     },
+
     removeRecipe: (parent, args, ctx, info) => {
-      //const { id } = args;
-      console.log(args);
       removeRecipeFunction(args.id);
-      // const result = recipesData.find(obj => obj.id === id);
-      // if (result) {
-      //   recipesData.splice(recipesData.indexOf(result), 1);
-      //   const result1 = authorsData.find(obj => obj.id === result.id);
-      //   const result2 = ingredientsData.find(obj => obj.id === result.id);
-      //   if (result1) {
-      //     authorsData.splice(authorsData.indexOf(result1), 1);
-      //     console.log(chalk.redBright(`Recipe removed from author ${result1.name}`));
-      //   }
-      //   if(result2){
-      //     ingredientsData.splice(ingredientsData.indexOf(result2));
-      //     console.log(chalk.redBright(`Recipe removed from ingredient ${result2.name}`));
-      //   }
-      // } else {
-      //   throw new Error(`Recipe ${id} not found`);
-      // }
-      // return "Receta eliminada correctamente";
       return "Receta eliminada correctamente";
     },
-
 
     removeIngredient: (parent, args, ctx, info) => {
       const ingredienteID = args.id;
@@ -238,6 +219,7 @@ const resolvers = {
       ingredientsData = ingredientsData.filter( ingredient => !(ingredient.id === ingredienteID));
       return "Ingredient removed";
     },
+
     removeAuthor: (parent, args, ctx, info) => {
       const { id } = args;
       const result = authorsData.find(obj => obj.id === id);
@@ -250,25 +232,7 @@ const resolvers = {
         authorsData.splice(authorsData.indexOf(result), 1);
       }
       return "Author deleted";
-    },
-    // removeIngredient: (parent, args, ctx, info) => {
-    //   const { id } = args;
-    //   const result = ingredientsData.find(obj => obj.id === id);
-
-    //   if (result) {
-    //     recipesData.map(elem => {
-    //       const aux = recipesData.find(obj =>
-    //         obj.ingredients.map(element => {
-    //           const aux = obj.ingredients.find(object => object === result.id);
-    //           removeRecipeFunction(aux.id);
-    //         })
-    //       );
-          
-    //     });
-    //     authorsData.splice(authorsData.indexOf(result), 1);
-    //   }
-    //   return "Ingredient deleted";
-    // }
+    }
   }
 };
 
