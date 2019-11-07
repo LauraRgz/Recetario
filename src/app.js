@@ -197,7 +197,7 @@ const resolvers = {
 
       ingredientsData.push(ingredient);
       console.log(
-        chalk.greenBright(
+        chalk.yellowBright(
           `\n Ingredient ${chalk.bold(
             ingredient.name
           )} added sucessfully! \n ID: ${chalk.bold(ingredient.id)}`
@@ -208,6 +208,7 @@ const resolvers = {
 
     removeRecipe: (parent, args, ctx, info) => {
       removeRecipeFunction(args.id);
+      console.log(chalk.redBright(`Recipe with ID ${args.id} deleted\n`));
       return "Receta eliminada correctamente";
     },
 
@@ -225,6 +226,7 @@ const resolvers = {
       ingredientsData = ingredientsData.filter(
         ingredient => !(ingredient.id === ingredienteID)
       );
+      console.log(chalk.redBright(`\nIngredient with ID ${args.id} deleted\n`));
       return "Ingredient removed";
     },
 
@@ -239,6 +241,9 @@ const resolvers = {
         });
         authorsData.splice(authorsData.indexOf(result), 1);
       }
+      
+      console.log(chalk.redBright(`\nAuthor with ID ${args.id} deleted\n`));
+      
       return "Author deleted";
     },
 
@@ -250,14 +255,17 @@ const resolvers = {
       if (args.email) {
         result.email = args.email;
       }
+      console.log(chalk.green(`\Author with ID ${args.id} updated\n`));
       return result;
     },
 
     updateIngredient: (parent, args, ctx, info) => {
       const result = ingredientsData.find(obj => obj.id === args.id);
       result.name = args.name;
+      console.log(chalk.green(`\nIngredient with ID ${args.id} updated\n`));
       return result;
     },
+
     updateRecipe: (parent, args, ctx, info) => {
       const result = recipesData.find(obj => obj.id === args.id);
       if(args.title) result.title = args.title;
@@ -277,6 +285,7 @@ const resolvers = {
         newIngredients.forEach(elem => elem.recipes.push(args.id));
         result.ingredients = args.ingredients;        
       };
+      console.log(chalk.green(`\nRecipe with ID ${args.id} updated\n`));
       return result;
     }
   }
@@ -285,4 +294,4 @@ const resolvers = {
 export { authorsData, ingredientsData, recipesData };
 
 const server = new GraphQLServer({ typeDefs, resolvers });
-server.start(() => console.log("Server started"));
+server.start(() => console.log(chalk.green("\Server started")));
