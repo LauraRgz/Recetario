@@ -3,10 +3,11 @@ import * as uuid from "uuid";
 import chalk from "chalk";
 import { removeRecipeFunction } from "./utils";
 //import { removeRecipeFunction } from "../utils";
-const recipesData = [];
-const authorsData = [];
-const ingredientsData = [];
-
+let recipesData = [];
+let authorsData = [];
+let ingredientsData = [];
+//Mongo Atlas (mLab) alojamiento: google. Europa
+//Promises
 const typeDefs = `
     type Recipe{
         title: String!
@@ -42,6 +43,7 @@ const typeDefs = `
         addIngredient(name: String!): Ingredient!
         removeRecipe(id: ID!): String!
         removeAuthor(id: ID!): String!
+        removeIngredient(id: ID!): String!
     }
 `;
 
@@ -105,10 +107,9 @@ const resolvers = {
     },
     showRecipes: (parent, args, ctx, info) => {
       return recipesData.map(elem => {
-        if(elem){
+        if (elem) {
           return elem;
-        }
-        else {
+        } else {
           return "No recipes found";
         }
       });
@@ -223,19 +224,51 @@ const resolvers = {
       // return "Receta eliminada correctamente";
       return "Receta eliminada correctamente";
     },
+
+
+    removeIngredient: (parent, args, ctx, info) => {
+      const ingredienteID = args.id;
+      recipesData = recipesData.filter( recipe => {
+        if(recipe.ingredients.includes(ingredienteID)){
+          const idAuthor = recipe.author;
+          const author = authorsData.find(aut => aut.id === idAuthor);
+          author.recipes = author.recipes.filter(recp => !(recp !== recipe.id))
+        } return !(recipe.ingredients.includes(ingredienteID))});
+
+      ingredientsData = ingredientsData.filter( ingredient => !(ingredient.id === ingredienteID));
+      return "Ingredient removed";
+    },
     removeAuthor: (parent, args, ctx, info) => {
       const { id } = args;
       const result = authorsData.find(obj => obj.id === id);
-      
+
       if (result) {
         recipesData.map(elem => {
-          const aux = recipesData.find(obj => obj.author === result.id)
+          const aux = recipesData.find(obj => obj.author === result.id);
           removeRecipeFunction(aux.id);
         });
         authorsData.splice(authorsData.indexOf(result), 1);
       }
       return "Author deleted";
-    }
+    },
+    // removeIngredient: (parent, args, ctx, info) => {
+    //   const { id } = args;
+    //   const result = ingredientsData.find(obj => obj.id === id);
+
+    //   if (result) {
+    //     recipesData.map(elem => {
+    //       const aux = recipesData.find(obj =>
+    //         obj.ingredients.map(element => {
+    //           const aux = obj.ingredients.find(object => object === result.id);
+    //           removeRecipeFunction(aux.id);
+    //         })
+    //       );
+          
+    //     });
+    //     authorsData.splice(authorsData.indexOf(result), 1);
+    //   }
+    //   return "Ingredient deleted";
+    // }
   }
 };
 
