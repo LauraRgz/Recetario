@@ -41,6 +41,6 @@ Crear las mutaciones necesarias para poder:
  - [x] Borrar una receta.
  - [x] Borrar un autor. Al borrar un autor, se borran todas sus recetas.
  - [x] Borrar un ingrediente. Al borrar un ingrediente, se borran todas las recetas que lo contengan.
- - [ ] Actualizar datos de un autor.
+ - [x] Actualizar datos de un autor.
  - [ ] Actualizar datos de una receta.
  - [ ] Actualizar datos de un ingrediente.

@@ -2,10 +2,11 @@ import { GraphQLServer } from "graphql-yoga";
 import * as uuid from "uuid";
 import chalk from "chalk";
 import { removeRecipeFunction } from "./utils";
-//import { removeRecipeFunction } from "../utils";
+
 let recipesData = [];
 let authorsData = [];
 let ingredientsData = [];
+
 //Mongo Atlas (mLab) alojamiento: google. Europa
 //Promises
 const typeDefs = `
@@ -44,6 +45,8 @@ const typeDefs = `
         removeRecipe(id: ID!): String!
         removeAuthor(id: ID!): String!
         removeIngredient(id: ID!): String!
+        updateAuthor(id: ID!, name: String, email: String): Author!
+        
     }
 `;
 
@@ -236,7 +239,20 @@ const resolvers = {
         authorsData.splice(authorsData.indexOf(result), 1);
       }
       return "Author deleted";
-    }
+    },
+
+    updateAuthor: (parent, args, ctx, info) => {
+      const result = authorsData.find(obj => obj.id === args.id);
+      if(args.name){
+        result.name = args.name;
+      }
+      if(args.email){
+        result.email = args.email; 
+      }
+      return result;   
+    },
+
+
   }
 };
 
