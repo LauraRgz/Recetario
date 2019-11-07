@@ -17,7 +17,7 @@ const removeRecipeFunction = function (argv){
     } else {
       throw new Error(`Recipe ${argv} not found`);
     }
-    return "Receta eliminada correctamente";
+    
 };
 
 export { removeRecipeFunction };

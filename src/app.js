@@ -105,7 +105,12 @@ const resolvers = {
     },
     showRecipes: (parent, args, ctx, info) => {
       return recipesData.map(elem => {
-        return elem;
+        if(elem){
+          return elem;
+        }
+        else {
+          return "No recipes found";
+        }
       });
     },
     showAuthors: (parent, args, ctx, info) => {
@@ -198,7 +203,7 @@ const resolvers = {
     removeRecipe: (parent, args, ctx, info) => {
       //const { id } = args;
       console.log(args);
-      removeRecipeFunction(args);
+      removeRecipeFunction(args.id);
       // const result = recipesData.find(obj => obj.id === id);
       // if (result) {
       //   recipesData.splice(recipesData.indexOf(result), 1);
@@ -216,21 +221,25 @@ const resolvers = {
       //   throw new Error(`Recipe ${id} not found`);
       // }
       // return "Receta eliminada correctamente";
+      return "Receta eliminada correctamente";
     },
     removeAuthor: (parent, args, ctx, info) => {
       const { id } = args;
       const result = authorsData.find(obj => obj.id === id);
-      if (result){
+      
+      if (result) {
+        recipesData.map(elem => {
+          const aux = recipesData.find(obj => obj.author === result.id)
+          removeRecipeFunction(aux.id);
+        });
         authorsData.splice(authorsData.indexOf(result), 1);
-        const resultRecipe = recipesData.find(obj => obj.id === result.id);
-        
-
       }
+      return "Author deleted";
     }
   }
 };
 
-export {authorsData, ingredientsData, recipesData};
+export { authorsData, ingredientsData, recipesData };
 
 const server = new GraphQLServer({ typeDefs, resolvers });
 server.start(() => console.log("Server started"));
