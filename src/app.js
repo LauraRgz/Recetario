@@ -209,7 +209,7 @@ const resolvers = {
     removeRecipe: (parent, args, ctx, info) => {
       removeRecipeFunction(args.id);
       console.log(chalk.redBright(`Recipe with ID ${args.id} deleted\n`));
-      return "Receta eliminada correctamente";
+      return "Recipe removed";
     },
 
     removeIngredient: (parent, args, ctx, info) => {

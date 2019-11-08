@@ -99,5 +99,4 @@ dist/
 #Archivos de texto
 *.txt
 
-queriesTemplates.md
 # End of https://www.gitignore.io/api/node
