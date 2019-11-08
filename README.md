@@ -41,7 +41,7 @@ You can access the app at 127.0.0.1:4000
 * Show one recipe
 * Show one ingredient
 
-The usage tempates can be found [here].
+The usage tempates can be found [here](./queriesTemplates.md) .
 
 ## Built with
 * [graphql-yoga](https://www.npmjs.com/package/graphql-yoga)

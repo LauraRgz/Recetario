@@ -11,7 +11,6 @@
 * [Query Recipe](#Recipe)
 * [Query Author](#Author)
 * [Query Ingredient](#Ingredient)
-
 * [Query Show recipes](#Show-Recipes)
 * [Query Show authors](#Show-Authors)
 * [Query Show ingredients](#Show-ingredients)
