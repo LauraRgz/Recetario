@@ -10,8 +10,6 @@
 ## Introduction
 Recetario is a Node-JS app developed to manage recipes. It is possible to create authors, ingredients and recipes, as well as edit and delete them.
 
-![GitHub](https://img.shields.io/github/license/LauraRgz/Recetario)
-
 ## Setup
 1. Install NPM packages
 ```
